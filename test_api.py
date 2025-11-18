@@ -41,48 +41,43 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
 
     status = requests.get(url, params=http_params)
     
+    if status and status.status_code==200:
+        try:        
+            if (datetime.now().minute-last_execution_time.minute)<60 and api_call_count<1000:
+                api_call_count += 1 
+            else: 
+                raise Exception('You have reached the api call limit')
+        except requests.HTTPError.strerror as e:
+            print(e)
+                
     content = json.loads(status.content)
 
-
-    if status:
-        if (datetime.now().minute-last_execution_time.minute)<60 and api_call_count<1000:
-            api_call_count += 1 
-        else: 
-            raise Exception('You have reached the api call limit')
-    else: 
-        raise Exception('packet is empty')
-            
+    metadata = content['metadata']
+    page, total_pages, per_page = metadata['page'], metadata['total'], metadata['perpage']
 
 
 
-    return status
+    while current_page<total_pages:
 
-    # metadata = status['metadata']
-    # current_page, total_pages = metadata['page'], metadata['total']
+        status = requests.get(url, params=http_params)
 
+        response = status.content
 
+        response_pretty = json.loads(response)
 
-    # while current_page<total_pages:
-
-    #     status = requests.get(url, params=http_params)
-
-    #     response = status.content
-
-    #     response_pretty = json.loads(response)
-
-    #     if response_pretty:
-    #         try:
-    #             results = response_pretty['results']
-    #         except json.JSONDecodeError as e:
-    #             print("object is empty")    
+        if response_pretty:
+            try:
+                results = response_pretty['results']
+            except json.JSONDecodeError as e:
+                print("object is empty")    
 
         
     
-    #     new_metadata = response_pretty['metadata']
-    #     current_page = new_metadata['current_page']
-    #     api_call_count+=1
-    #     all_data.update(results)
-    #     time.sleep(0.5)
+        new_metadata = response_pretty['metadata']
+        current_page = new_metadata['current_page']
+        api_call_count+=1
+        all_data.update(results)
+        time.sleep(0.5)
 
     
     # new_api_execution_data = {'last_execution_time': datetime.now(), \
