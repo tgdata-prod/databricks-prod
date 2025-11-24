@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os 
 import json 
 import time 
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 def write_api_execution_data(new_api_execution_data: dict ,json_file_path='./api_execution_data.json'):
@@ -35,13 +35,14 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
     all_data = []    
 
     last_execution_time_utc = datetime.fromisoformat(last_execution_data['last_execution_time_utc'])
-    last_execution_time_utc.replace(minute=0, second=0)
+    last_execution_time_utc_last_reset = last_execution_time_utc.replace(minute=0, second=0)
+    
 
     api_call_count = last_execution_data['api_call_count']
         
     utc_now = datetime.astimezone(datetime.now(),tz=pytz.utc)    
-    time_delta_mins = (utc_now-last_execution_time_utc).total_seconds()/60
-
+    time_delta_mins = (utc_now-last_execution_time_utc_last_reset).total_seconds()/60
+    print(f'time delta since last rate-limit reset: {time_delta_mins}')
     #Rate Limit (https://collegescorecard.ed.gov/data/api-documentation/)  
     if not api_call_count<1000 and time_delta_mins < 60:
         raise Exception('You have reached the api call limit')
@@ -55,7 +56,7 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
         status = requests.get(url, http_params, timeout=30)
         status.raise_for_status()
         api_call_count+=1
-    
+        
 
         if not status and not status.status_code==200:
             print(f'http error occured with code {status.status_code}')
@@ -89,7 +90,7 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
             new_api_execution_data = {'last_execution_time_utc': datetime.astimezone(datetime.now(),tz=pytz.utc).isoformat(), 'api_call_count': api_call_count} 
             write_api_execution_data(new_api_execution_data)
             print(f'last executed {new_api_execution_data}')
-            print(f'time in mins until refresh {60-time_delta_mins}')        
+            print(f'time in mins until refresh {(last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now}')        
             return all_data, metadata
 
         time.sleep(0.5)
