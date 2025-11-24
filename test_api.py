@@ -90,13 +90,13 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
 
         if page>=total_pages or page > 10:
             print('\n\nall pages cycled')
-            new_api_execution_data = {'last_execution_time_utc': datetime.astimezone(datetime.now(),tz=pytz.utc).isoformat(), 'api_call_count': api_call_count} 
+            new_api_execution_data = {'last_execution_time_utc': utc_now.isoformat(), 'api_call_count': api_call_count} 
             write_api_execution_data(new_api_execution_data)
             print(f'last executed {new_api_execution_data}')
             print(f'time in mins until refresh {(last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now}')        
             return all_data, metadata
 
         time.sleep(0.5)
-    new_api_execution_data = {'last_execution_time_utc': datetime.astimezone(datetime.now(),tz=pytz.utc).isoformat(), 'api_call_count': api_call_count}  
+    new_api_execution_data = {'last_execution_time': utc_now.astimezone(tz=pytz.timezone('Australia/Melbourne')).isoformat(), 'api_call_count': api_call_count}  
     write_api_execution_data(new_api_execution_data)
     
