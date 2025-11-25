@@ -85,10 +85,10 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
         
         all_data.append(results)
         page = page + 1
-        print(f'page is {page} total pages is {total_pages}\n---------------------------')    
+        print(f'page is {page}, total pages is {total_pages}\n---------------------------')    
 
 
-        if page>=total_pages or page > 10:
+        if page>=total_pages:
             print('\n\nall pages cycled')
             new_api_execution_data = {'last_execution_time_utc': utc_now.isoformat(), 'api_call_count': api_call_count} 
             write_api_execution_data(new_api_execution_data)
