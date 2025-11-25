@@ -1,5 +1,4 @@
 .env
-.env.example
 .venv
 __pycache__
 api_execution_data.json
