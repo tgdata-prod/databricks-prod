@@ -19,6 +19,11 @@ You can then log in to Azure using ```az login``` in power shell.
 
 Follow the authentication guide [here](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli?view=azure-cli-latest) to set up your Azure CLI environemnt that you installed.
 
+### Local Development Authentication 
+
+Once you have downloaded and authenticated Azure in your cmd, you need to [authenticate your python app](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/local-development-service-principal?tabs=azure-cli).
+
+
 
 ## Rate-Limits 
 
