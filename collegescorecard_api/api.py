@@ -51,13 +51,14 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
     
     page=0
     while True:    
-        
+
         print('commencing fetch\n')
         http_params.update({'per_page': 100, 'page': page})
         status = requests.get(url, http_params, timeout=30)
         status.raise_for_status()
         api_call_count+=1
-
+        new_api_execution_data = {'last_execution_time_utc': utc_now.isoformat(), 'api_call_count': api_call_count}   
+        write_api_execution_data(new_api_execution_data)
 
         if not status or not status.status_code==200:
             raise Exception(f'http error occured with code {status.status_code}')
@@ -84,27 +85,21 @@ def get_university_data_http(http_params: dict, last_execution_data: dict):
         page = page + 1
         print(f'page is {page}, total pages is {total_pages}\n---------------------------')    
 
-        new_api_execution_data = {'last_execution_time_utc': utc_now.isoformat(), 'api_call_count': api_call_count}   
         if page>=total_pages:
             print('\n\nall pages cycled')
             print(f'last executed {new_api_execution_data}')
-            print(f'time in mins until refresh {(last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now}')        
+            print(f'time in mins until refresh {(last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now}')  
+                    
             return all_data, new_api_execution_data
         time.sleep(0.5)
-        return new_api_execution_data
-
-        
         
     
 def api_main(http_params: dict):
-    try:
-        last_execution_data = load_api_execution_data()
-        data, new_api_execution_data = get_university_data_http(http_params=http_params, \
-                                                                last_execution_data=last_execution_data)
-        new_api_execution_data = {'last_execution_time_utc': new_api_execution_data['last_execution_time_utc'], \
-                                'api_call_count': new_api_execution_data['api_call_count']} 
-        write_api_execution_data(new_api_execution_data)
-    except Exception as e:
-        write_api_execution_data(new_api_execution_data)
-        raise e
+
+    last_execution_data = load_api_execution_data()
+    data, new_api_execution_data = get_university_data_http(http_params=http_params, \
+                                                            last_execution_data=last_execution_data)
+    new_api_execution_data = {'last_execution_time_utc': new_api_execution_data['last_execution_time_utc'], \
+                            'api_call_count': new_api_execution_data['api_call_count']} 
+    write_api_execution_data(new_api_execution_data)
     return data
