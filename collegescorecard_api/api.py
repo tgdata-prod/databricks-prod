@@ -5,6 +5,8 @@ import json
 import time 
 from datetime import datetime, timedelta
 import pytz
+from tenacity import retry, retry_if_not_exception_type, wait_exponential, stop_after_attempt, stop_after_delay  
+from urllib.error import HTTPError
 
 def write_api_execution_data(new_api_execution_data: dict ,json_file_path='./api_execution_data.json'):
     with open(json_file_path, 'w') as file:
@@ -23,6 +25,11 @@ def load_api_execution_data(json_file_path='./api_execution_data.json') -> dict:
         api_call_count = 0   
     return {'last_execution_time_utc':last_execution_time_utc, 'api_call_count':api_call_count}
 
+@retry(
+        stop=stop_after_attempt(3) | stop_after_delay(30),
+        wait=wait_exponential(multiplier=2, max=120),   
+        retry=retry_if_not_exception_type(HTTPError)
+)
 #potential http params reference (https://collegescorecard.ed.gov/data/api-documentation/)
 def get_university_data_http(http_params: dict):
     
@@ -36,7 +43,6 @@ def get_university_data_http(http_params: dict):
 
     last_execution_time_utc = datetime.fromisoformat(last_execution_data['last_execution_time_utc'])
     last_execution_time_utc_last_reset = last_execution_time_utc.replace(minute=0, second=0)
-    
 
     api_call_count = last_execution_data['api_call_count']
         
@@ -94,7 +100,7 @@ def get_university_data_http(http_params: dict):
         time.sleep(0.5)
 
 if __name__ == "__main__":
-
+    #test fields for Tom
     fields= ['id', 'school.name', 'school.state', 'latest.student.size', 
          'latest.cost.tuition.in_state', 'latest.cost.tuition.out_of_state']
     i=0
