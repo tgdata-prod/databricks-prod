@@ -94,7 +94,7 @@ def get_university_data_http(http_params: dict):
         if page>=total_pages:
             print('\n\nall pages cycled')
             print(f'last executed {new_api_execution_data}')
-            print(f'time in mins until refresh {(last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now}')  
+            print(f'time in mins until refresh {((last_execution_time_utc_last_reset+timedelta(hours=1))-utc_now).total_seconds()/60}')  
                     
             return all_data
         time.sleep(0.5)

@@ -17,16 +17,13 @@ It is our goal in this project to demonsrate a sort of end-to-end ETL process wi
 
 Databricks is cloud platform independant, we use Microsoft Azure in this project.
 To download the CLI for Azure, you will need to install using ```winget install --exact --id Microsoft.AzureCLI```.
-You can then log in to Azure using ```az login``` in power shell.
+You can then log in to Azure using [azure_cli_auth.ps1](utils\azure_cli_auth.ps1), you need to run this script if you want to authenticate your python application as per the [Authentication during local development](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/overview#authentication-during-local-development).
+[This image](https://learn.microsoft.com/en-us/azure/developer/python/sdk/media/local-dev-dev-accounts-overview.png) demonstrates how applciation authentication works in azure. 
 
-### Cloud Authentication
-
-Follow the authentication guide [here](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli?view=azure-cli-latest) to set up your Azure CLI environemnt that you installed.
-You are going to have to set up your own azure container delta lake. 
 
 ### Local Development Authentication 
 
-Once you have downloaded and authenticated Azure in your cmd, you need to [authenticate your python app](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/local-development-service-principal?tabs=azure-cli).
+Once you have downloaded and authenticated Azure in your cmd, you need to .
 
 ## Rate-Limits 
 
