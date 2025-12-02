@@ -32,13 +32,14 @@ You now have two choices to authenticate your python application, you can either
 You now have to create a security group for the account using; 
 ```az ad group create --display-name <display name here> --mail-nickname <mail nickname here> --description "security group to manage our python application"```.
 
-The cmdlet should out-put an id we will need, if not, use; 
-```az ad group show --group "<my group>" --query id --output tsv```.
+The cmdlet should out-put an "id" we will need, if you want to request it again, use; 
+```az ad group show --group "<display name here>" --query id --output tsv```.
+You may also want to add this to your .env as per the .env.example <MICROSOFT_ENTRA_SECURITY_GROUP_HERE>.
 
 You can now get the users Object Id using [```az ad user list```](https://learn.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az-ad-user-list) for the dev you want to add.
 
 This will give you their Object Id and you can use it to now add them to the group; 
-```az ad group member add --group <group-name> --member-id <object-id>``` 
+```az ad group member add --group <display name here> --member-id <user-object-id>``` 
 
 ### Assigning roles to your group
 
