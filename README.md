@@ -3,7 +3,7 @@ End-to-End data platform ingesting raw data from api to demonstrate ETL process.
 
 ## Setting Up Your Environment
 
-If you want to emulate this project on your machine it is recommended to use a virtual environment using python venv -> ```python -m venv venv -r requirements```.
+If you want to emulate this project on your machine it is recommended to use a virtual environment using python venv -> ```python -m venv venv``` then ```pip install -r requirements.txt```.
 
 ## Data Source 
 
@@ -20,7 +20,9 @@ To download the CLI for Azure, you will need to install using ```winget install 
 
 ### Authenticating your app with Azure
 
-You can then log in to Azure using ```az login```, there should be a default subscription that is created when you first make an account with azure and you can find it using ```az account list``` under "name".
+Before you can authenticate locally you need to [create an account with Azure](https://azure.microsoft.com/en-au/pricing/purchase-options/azure-account?icid=azurefreeaccount). 
+
+You can then log in to Azure using ```az login``` in the cli, there should be a default subscription that is created when you first make an account with azure and you can find it using ```az account list``` under "name".
 Once you have your subscription name, you can run ```az account get-access-token --subscription "<subscription ID or name>"``` to recieve your JWT, you don't need to store this token as it is stored when you run ```az login```.
 You now have two choices to authenticate your python application, you can either use a [service principal](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication-local-development-service-principal) or create a [dev account](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/local-development-dev-accounts?tabs=azure-cli%2Csign-in-azure-cli). In this project, we use a dev account because we may want to onboard other developers in the future instead of making service principals for every developer. The downside of this approach however is developers may have more perms than they require so it is recommended for small teams. 
 [This image](https://learn.microsoft.com/en-us/azure/developer/python/sdk/media/local-dev-dev-accounts-overview.png) demonstrates how applciation authentication works in azure. 
