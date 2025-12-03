@@ -1,4 +1,4 @@
-def make_string_from_list(list):
+def make_stringlist_from_list(list):
     i=0
     str_obj=str()
     for field in list:
