@@ -13,12 +13,12 @@ The data used in this project was sourced from the official U.S Department of Ed
 
 It is our goal in this project to demonsrate a sort of end-to-end ETL process with Bi capabilities, specifically with Data Bricks and Power BI in mind. 
 
-## Cloud Platform 
+## Azure Cloud 
 
 Databricks is cloud platform independant, we use Microsoft Azure in this project.
 To download the CLI for Azure, you will need to install using ```winget install --exact --id Microsoft.AzureCLI```.
 
-### Authenticating your app with Azure
+### Authenticating your app with Azure Quickstart
 
 Before you can authenticate locally you need to [create an account with Azure](https://azure.microsoft.com/en-au/pricing/purchase-options/azure-account?icid=azurefreeaccount). 
 
@@ -49,13 +49,24 @@ Now you have created an Entra group and added users to it, you can now assign th
 Refer to [Assign roles to the Microsoft Entra group](https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/local-development-dev-accounts) to edit roles and scope as you prefer.
 
 to make the group a blob contributer for our storage account, run;
-```az role assignment create --assignee "<group-object-id or group-principal-name>" --role "Storage Blob Data Contributor" --scope "/subscriptions/<sub-id>/resourceGroups/<rg-name>/providers/Microsoft.Storage/storageAccounts/<account-name>"```
+```az role assignment create --assignee "<group-object-id or group-principal-name>" --role "Storage Blob Data Contributor" --scope "/subscriptions/<sub-id>/resourceGroups/<resourcegroup-name>/providers/Microsoft.Storage/storageAccounts/<account-name>"```
 
 To get the in-use subscription id, use ```az account show --query id --output tsv```
 
-### Local Development Authentication 
+## Setting Up Databricks
 
-Once you have downloaded and authenticated Azure in your cmd, you need to .
+First you will need to enable the databricks connector in Azure under your resource group and subscription.
+
+You can follow the [CLI tutorial here](https://docs.databricks.com/aws/en/dev-tools/cli/tutorial?language=Windows), install the Databricks CLI ```winget install Databricks.DatabricksCLI```.
+
+then run ```databricks auth login --host <your-workbook-url>```.
+
+
+
+You may need to
+
+
+
 
 ## Rate-Limits 
 

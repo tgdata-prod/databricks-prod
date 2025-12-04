@@ -98,4 +98,3 @@ def get_university_data_http(http_params: dict):
                     
             return all_data
         time.sleep(0.5)
-

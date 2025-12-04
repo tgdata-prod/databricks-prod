@@ -38,14 +38,10 @@ data = get_university_data_http(http_params)
 with open(f'./collegescorecard_api/university_data.csv', 'w') as file:
         writer = csv.writer(file)
         writer.writerows(data)
+
+if not os.path.exists(f'./collegescorecard_api/university_data.csv'):
+        raise Exception('file was not written')        
+container_client.delete_blob('university_data.csv')
+blob_client.upload_blob(f'./collegescorecard_api/university_data.csv')
         
-        blob_client.upload_blob(f'./collegescorecard_api/university_data.csv')
-        
-
-
-        if not os.path.exists(f'./collegescorecard_api/university_data.csv'):
-                raise Exception('file was not written')
-        os.remove(f'./collegescorecard_api/university_data.csv')
-
-for i in container_client.list_blob_names(name_starts_with='university_data.csv'):
-    print(i)
+os.remove(f'./collegescorecard_api/university_data.csv')
