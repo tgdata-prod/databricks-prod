@@ -1,5 +1,8 @@
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.jobs import NotebookTask, Source, Task
+import time
+
+
 
 w = WorkspaceClient()
 
@@ -12,7 +15,7 @@ j = w.jobs.create(
       source = Source("WORKSPACE")
       ),
       task_key = "MyTask",
-   )
+  )
   ]
 )
 
@@ -20,6 +23,20 @@ job_id = j.job_id
 
 w.jobs.run_now(job_id=job_id)
 
-active_jobs = w.jobs.list_runs(active_only=True)
+while True:
 
-active_jobs
+  active_jobs = list(w.jobs.list_runs(active_only=True))
+  
+  if active_jobs:
+    for job in active_jobs:
+      print(job)
+    time.sleep(3)      
+  else:
+    complete_jobs = list(w.jobs.list_runs(completed_only=True))      
+    for job in complete_jobs:
+      if job.state.result_state.name == "FAILED" or job.state.life_cycle_state.name == "INTERNAL_ERROR":
+        raise Exception(f"Run time was exited\n{job}")
+      else:
+        print(f'job successful\n{job}')
+        w.jobs.delete(job_id=job_id)
+        break
