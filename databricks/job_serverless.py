@@ -27,16 +27,19 @@ while True:
 
   active_jobs = list(w.jobs.list_runs(active_only=True))
   
-  if active_jobs:
-    for job in active_jobs:
-      print(job)
-    time.sleep(3)      
-  else:
-    complete_jobs = list(w.jobs.list_runs(completed_only=True))      
-    for job in complete_jobs:
-      if job.state.result_state.name == "FAILED" or job.state.life_cycle_state.name == "INTERNAL_ERROR":
-        raise Exception(f"Run time was exited\n{job}")
-      else:
-        print(f'job successful\n{job}')
-        w.jobs.delete(job_id=job_id)
-        break
+  if not active_jobs:
+      raise Exception('no jobs')
+
+  for job in active_jobs:
+    print(job)
+    time.sleep(3)        
+  
+  complete_jobs = list(w.jobs.list_runs(completed_only=True))      
+  
+  for job in complete_jobs:
+    if job.state.result_state.name == "FAILED" or job.state.life_cycle_state.name == "INTERNAL_ERROR":
+      raise Exception(f"Run time was exited\n{job}")
+    else:
+      print(f'job successful\n{job}')
+      w.jobs.delete(job_id=job_id)
+      break
