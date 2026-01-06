@@ -4,3 +4,5 @@ __pycache__
 api_execution_data.json
 #notebook for testing for Tom 
 tester.ipynb
+logs
+airflow.cfg
