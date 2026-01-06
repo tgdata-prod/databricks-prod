@@ -2,8 +2,6 @@ from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.jobs import NotebookTask, Source, Task
 import time
 
-
-
 w = WorkspaceClient()
 
 j = w.jobs.create(
